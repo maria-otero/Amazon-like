@@ -27,12 +27,12 @@ Amazon-like storefront with the MySQL: CLI App
 
 
 5. [x] Then create a Node application called `bamazonCustomer.js`. 
-   [ ] Running this application will:
-        1. First display all of the items available for sale. Include the:
+    Running this application will:
+        1. [x] First display all of the items available for sale. Include the:
             - ids
             - names
             - prices of products for sale.
-        2. The app should then prompt users with 2 messages:
+        2. [ ] The app should then prompt users with 2 messages:
             - The first should ask them the ID of the product they would like to buy.
             - The second message should ask how many units of the product they would like to buy.
 
