@@ -22,7 +22,6 @@ connection.connect(function(err) {
 });  
 
 
-
 // Show all products into a table
 function showAllProducts() {
     connection.query("SELECT * FROM products", function(err, res) {
@@ -53,14 +52,26 @@ function buyItem() {
             filter: Number
         } 
     ]).then(function(answer) {
+        // Grab stock_quantity number of chosen product id
+        connection.query("SELECT stock_quantity FROM products WHERE id = " + answer.chosenID, function(err, res) {
+            if (err) {
+                console.log("Sorry, we do not have that producto, chose one from the table.");
+                showAllProducts();
+            }
+            console.log("holi", res[0].stock_quantity);
+            var stock_quantity = res[0].stock_quantity;
+        })
+
         // Updating inventory
-        var updateInventory = "UPDATE products SET stock_quantity = " + (stock_quantity - answer.chosenQuantity) + "WHERE id = " + answer.chosenID;
+        var updateInventory = "UPDATE products SET stock_quantity = " + (res.stock_quantity - answer.chosenQuantity) + "WHERE id = " + answer.chosenID;
 
-        connection.query(updateInventory, function(err, data) {
+        connection.query(updateInventory, function(err, res) {
             if (err) throw err;
+            
+            console.log(updateInventory);
 
-            // Show the price of the product... how can I grab de price of the chocen ID from the table??????
-            console.log("Your ordeer has been placed! Your total is" + productID.price * answer.chosenQuantity);
+            // Show the price of the product
+            console.log("Your ordeer has been placed! Your total is" + res.price * answer.chosenQuantity);
 
             console.log("Thank you for shopping with us!");
             console.log("-----------------------------------------------------\n");
@@ -74,8 +85,7 @@ function buyItem() {
 
 
 
-// Promp the user if he whan to keep shopping
-// showAllProducts if yes; if no, connection ends
+// Promp the user if he whan to keep shopping: howAllProducts if yes; if no, connection ends
 function keepShopping() {
     inquirer.prompt([
         {
@@ -93,24 +103,3 @@ function keepShopping() {
         }
     })
 }
-
-
-
-// connection.query("SELECT * FROM products WHERE ?", 
-// { id: answer.chosenID}, function(err, res) {
-//     if (err) throw err;
-    
-//     // Response if product exist
-//     if (answer.chosenID === productID) {
-//         console.log("We are proccesing your order!");
-//     } else {
-//         console.log("Plsease choce an ID that exist.");
-//     }
-//     // Response if there are enough stock
-//     if (answer.chosenQuantity <= productStock) {
-//         console.log("Your product is in stock... placing your order!");
-//     } else {
-//         console.log("Sorry, item's not in stock to place your order.\n" + 
-//         "Please change your order.\n");
-//         keepShopping();
-//     }
