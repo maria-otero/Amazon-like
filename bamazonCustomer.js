@@ -43,45 +43,40 @@ function buyItem() {
         {
             name: "chosenID",
             type: "input",
-            message: "What is de Item ID of the product you would like to buy?",
-            filter: Number
+            message: "What is de Item ID of the product you would like to buy?"
         }, {
             name: "chosenQuantity",
             type: "input",
-            message: "How many units of this product would you like to buy?",
-            filter: Number
+            message: "How many units of this product would you like to buy?"
         } 
     ]).then(function(answer) {
         // Grab stock_quantity number of chosen product id
-        connection.query("SELECT stock_quantity FROM products WHERE id = " + answer.chosenID, function(err, res) {
+        connection.query("SELECT stock_quantity FROM products WHERE id = ?", [answer.chosenID], function(err, res) {
             if (err) {
                 console.log("Sorry, we do not have that producto, chose one from the table.");
                 showAllProducts();
+            } else {
+                //Update inventory
+                // var stock_quantity = res[0].stock_quantity;
+                // console.log(res.stock_quantity);
+                var newInventory = parseInt(res[0].stock_quantity) - parseInt(answer.chosenQuantity);
+                console.log(newInventory);
+                connection.query("UPDATE products SET ? WHERE ?" [
+                    {stock_quantity: newInventory}, 
+                    {id: answer.chosenID}
+                ]);
+
+                // Show the price of the product
+                console.log("Your ordeer has been placed! Your total is" + parseInt(res.price) * parseInt(answer.chosenQuantity));
+
+                console.log("Thank you for shopping with us!");
+                console.log("-----------------------------------------------------\n");
+
+                keepShopping();
             }
-            console.log("holi", res[0].stock_quantity);
-            var stock_quantity = res[0].stock_quantity;
-        })
-
-        // Updating inventory
-        var updateInventory = "UPDATE products SET stock_quantity = " + (res.stock_quantity - answer.chosenQuantity) + "WHERE id = " + answer.chosenID;
-
-        connection.query(updateInventory, function(err, res) {
-            if (err) throw err;
-            
-            console.log(updateInventory);
-
-            // Show the price of the product
-            console.log("Your ordeer has been placed! Your total is" + res.price * answer.chosenQuantity);
-
-            console.log("Thank you for shopping with us!");
-            console.log("-----------------------------------------------------\n");
-
-            keepShopping();
-
-        }); 
+        });
     })
 }
-
 
 
 
