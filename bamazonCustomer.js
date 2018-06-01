@@ -57,11 +57,9 @@ function buyItem() {
                 showAllProducts();
             } else {
                 //Update inventory
-                // var stock_quantity = res[0].stock_quantity;
-                // console.log(res.stock_quantity);
                 var newInventory = parseInt(res[0].stock_quantity) - parseInt(answer.chosenQuantity);
-                console.log(newInventory);
-                connection.query("UPDATE products SET ? WHERE ?" [
+                // console.log(newInventory);
+                connection.query("UPDATE products SET ? WHERE ?", [
                     {stock_quantity: newInventory}, 
                     {id: answer.chosenID}
                 ]);
@@ -79,8 +77,7 @@ function buyItem() {
 }
 
 
-
-// Promp the user if he whan to keep shopping: howAllProducts if yes; if no, connection ends
+//Promp the user if he whan to keep shopping: howAllProducts if yes; if no, connection ends
 function keepShopping() {
     inquirer.prompt([
         {
@@ -88,7 +85,7 @@ function keepShopping() {
             type: "confirm",
             message: "Would you like to keep shopping?"
         }
-    ]).then(function(ranswer) {
+    ]).then(function(answer) {
         if (answer.confirm) {
             console.log("-----------------------------------------------------");
             showAllProducts();
