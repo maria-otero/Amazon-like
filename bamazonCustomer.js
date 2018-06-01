@@ -36,7 +36,6 @@ function showAllProducts() {
 }
 
 
-
 // Promp the user what product he want, and how many of them
 function buyItem() {
     inquirer.prompt([
@@ -70,10 +69,11 @@ function buyItem() {
                 var totalCost = (res[0].price) * (answer.chosenQuantity);
                 // console.log(res.price);
                 // console.log(res[0].price);
-                console.log("\nYour ordeer has been placed! Your total is: $" + totalCost);
+                console.log("\n****************************************************\n");
+                console.log("Your ordeer has been placed! Your total is: $" + totalCost);
 
                 console.log("Thank you for shopping with us!");
-                console.log("-----------------------------------------------------\n");
+                console.log("\n****************************************************\n");
 
                 keepShopping();
             }
@@ -95,7 +95,11 @@ function keepShopping() {
             console.log("-----------------------------------------------------");
             showAllProducts();
         } else {
+            console.log("\n****************************************************");
             console.log("Thank you for shopping Bamazon!");
+            console.log("****************************************************\n");
+            console.log();
+            console.log();
             connection.end();
         }
     })
