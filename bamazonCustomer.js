@@ -43,11 +43,13 @@ function buyItem() {
         {
             name: "chosenID",
             type: "input",
-            message: "What is de Item ID of the product you would like to buy?"
+            message: "What is de Item ID of the product you would like to buy?",
+            filter: Number
         }, {
             name: "chosenQuantity",
             type: "input",
-            message: "How many units of this product would you like to buy?"
+            message: "How many units of this product would you like to buy?",
+            filter: Number
         } 
     ]).then(function(answer) {
         // Grab stock_quantity number of chosen product id
@@ -57,7 +59,7 @@ function buyItem() {
                 showAllProducts();
             } else {
                 //Update inventory
-                var newInventory = parseInt(res[0].stock_quantity) - parseInt(answer.chosenQuantity);
+                var newInventory = res[0].stock_quantity - answer.chosenQuantity;
                 // console.log(newInventory);
                 connection.query("UPDATE products SET ? WHERE ?", [
                     {stock_quantity: newInventory}, 
@@ -65,7 +67,8 @@ function buyItem() {
                 ]);
 
                 // Show the price of the product
-                console.log("Your ordeer has been placed! Your total is" + parseInt(res.price) * parseInt(answer.chosenQuantity));
+                var totalCost = parseInt(res.price) * parseInt(answer.chosenQuantity);
+                console.log("\nYour ordeer has been placed! Your total is" + totalCost);
 
                 console.log("Thank you for shopping with us!");
                 console.log("-----------------------------------------------------\n");
