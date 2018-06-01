@@ -53,7 +53,7 @@ function buyItem() {
         } 
     ]).then(function(answer) {
         // Grab stock_quantity number of chosen product id
-        connection.query("SELECT stock_quantity FROM products WHERE id = ?", [answer.chosenID], function(err, res) {
+        connection.query("SELECT * FROM products WHERE id = ?", [answer.chosenID], function(err, res) {
             if (err) {
                 console.log("Sorry, we do not have that producto, chose one from the table.");
                 showAllProducts();
@@ -67,8 +67,10 @@ function buyItem() {
                 ]);
 
                 // Show the price of the product
-                var totalCost = parseInt(res.price) * parseInt(answer.chosenQuantity);
-                console.log("\nYour ordeer has been placed! Your total is" + totalCost);
+                var totalCost = (res[0].price) * (answer.chosenQuantity);
+                // console.log(res.price);
+                // console.log(res[0].price);
+                console.log("\nYour ordeer has been placed! Your total is: $" + totalCost);
 
                 console.log("Thank you for shopping with us!");
                 console.log("-----------------------------------------------------\n");
